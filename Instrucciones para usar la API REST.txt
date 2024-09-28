@@ -1,0 +1,222 @@
+====================================== Instrucciones para probar la API:
+
+1. Usa una herramienta como **Postman** para enviar peticiones HTTP / HTTPS.
+2. Asegúrate de utilizar las rutas y métodos correctos para las operaciones que quieres realizar.
+3. Para las rutas restringidas (como las de repuestos), asegúrate de enviar las credenciales necesarias si es que hay autenticación implementada para los roles.
+
+
+====================================== URL Y RUTAS
+
+## URL del repositorio del proyecto
+  https://github.com/pablobravodc/nestjs-desafio4.git
+
+### URL del servidor:
+  https://nestjs-desafio4-takt.onrender.com
+
+### Base de datos:
+La base de datos MongoDB está alojada en Railway:
+   MONGODB_URL=mongodb://mongo:VxrjdAmoVNbJtVbjrNUxkAJLovImlngV@junction.proxy.rlwy.net:38633
+
+Nota: Railway.app solo me permitio alojar la base de datos, resolvi alojando mi aplicación en Render.
+
+### Rutas de la API y ejemplos:
+
+#### Manejo de usuarios
+
+1. Registro de usuario
+   - Método: `POST`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/user/register`
+   - Body (JSON):
+     ```json
+{
+        "name": "Daniel Ramos",
+        "email": "dramos@gmail.com",
+        "password": "1111",
+        "roles": "client",
+        "phone": "+584242334597"
+}
+     ```
+
+2. Inicio de sesión
+   - Método: `POST`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/user/login`
+   - **Body** (JSON):
+     
+  **Usuario admin:
+  ```json
+      {
+          "email": "areyes@gmail.com",
+          "password": "1111"
+      }
+   ```
+ **Usuario client
+  ```json
+      {
+        "email": "dramos@gmail.com",
+        "password": "1111"
+      }
+   ```
+- Response: { "token": "jwt_token" }
+
+
+3. Obtener todos los usuarios
+   - Método: `GET`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/user`
+   - Authorization: { "Bearer token" : "jwt_token"}
+   - Response: 
+  [
+    {
+        "_id": "66f2372dcb6a1001a213082b",
+        "name": "Angel Reyes",
+        "email": "areyes@gmail.com",
+        "password": "$2b$10$R8kTcADF65rRGZkCxeWxMeHz28Oi.MyWvexU5ft/LyVqQ6SCnnDz2",
+        "roles": "admin",
+        "phone": "+584242334567",
+        "createdAt": "2024-09-24T03:51:09.461Z",
+        "__v": 0
+    },
+    {
+        "_id": "66f2377bcb6a1001a213082d",
+        "name": "Pablo Bravo",
+        "email": "pbravo@gmail.com",
+        "password": "$2b$10$A2vr/7lnCfzSWFDlJGwpSeGyLTlFj9HVVR.TcByGUoufPhwoUE6ve",
+        "roles": "admin",
+        "phone": "+584242334597",
+        "createdAt": "2024-09-24T03:52:27.717Z",
+        "__v": 0
+    }
+  ]
+
+
+4. Obtener un usuario por ID
+   - Método: `GET`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/user/:id`
+   - Authorization: { "Bearer token" : "jwt_token"}
+   - Response: 
+    {
+        "_id": "66f2372dcb6a1001a213082b",
+        "name": "Angel Reyes",
+        "email": "areyes@gmail.com",
+        "password": "$2b$10$R8kTcADF65rRGZkCxeWxMeHz28Oi.MyWvexU5ft/LyVqQ6SCnnDz2",
+        "roles": "admin",
+        "phone": "+584242334567",
+        "createdAt": "2024-09-24T03:51:09.461Z",
+        "__v": 0
+    }
+
+
+5. Eliminar un usuario
+   - Método: `DELETE`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/user/:id`
+   - Authorization: { "Bearer token" : "jwt_token"}
+   - Response: 
+           "This action removes a #id user"
+
+
+-------------------------
+
+
+#### Manejo de repuestos
+
+1. Crear repuesto (Solo para Admin)
+   - Método: `POST`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/repuestos/create`
+   - Authorization: { "Bearer token" : "jwt_token"}
+   - Body (JSON):
+     ```json
+     {
+        "nombre": "repuesto A",
+        "marca": "AAA",
+        "modelo": "PBC-111",
+        "anio": 2023,
+        "precio": 180,
+        "foto": "https://tienda.com/REPUESTO-1.jpg"
+    }
+     ```
+   - Response: 
+	{
+	    "nombre": "repuesto A",
+	    "marca": "AAA",
+	    "modelo": "PBC-111",
+	    "anio": 2023,
+	    "precio": 180,
+	    "foto": "https://tienda.com/REPUESTO-1.jpg",
+	    "_id": "66f774949bd2e5bf16a7e3c9",
+	    "__v": 0
+	}
+
+2. Obtener todos los repuestos (Para Admin y User)
+   - Método: `GET`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/repuestos/lista`
+   - - Authorization: { "Bearer token" : "jwt_token"}
+   - Response: 
+[
+    {
+        "_id": "66f774949bd2e5bf16a7e3c9",
+        "nombre": "repuesto A",
+        "marca": "AAA",
+        "modelo": "PBC-111",
+        "anio": 2023,
+        "precio": 180,
+        "foto": "https://tienda.com/REPUESTO-1.jpg",
+        "__v": 0
+    },
+    {
+        "_id": "66f7761f9bd2e5bf16a7e3cb",
+        "nombre": "repuesto B",
+        "marca": "BBB",
+        "modelo": "PBC-222",
+        "anio": 2023,
+        "precio": 190,
+        "foto": "https://tienda.com/REPUESTO-2.jpg",
+        "__v": 0
+    }
+]
+
+3. Obtener un repuesto por ID** (Solo para Admin)
+   - Método: `GET`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/repuestos/:id`
+   - Authorization: { "Bearer token" : "jwt_token"}
+   - Response: 
+	{
+	    "_id": "66f774949bd2e5bf16a7e3c9",
+	    "nombre": "repuesto A",
+	    "marca": "AAA",
+	    "modelo": "PBC-111",
+	    "anio": 2023,
+	    "precio": 180,
+	    "foto": "https://tienda.com/REPUESTO-1.jpg",
+	    "__v": 0
+	}
+
+4. Actualizar repuesto por ID** (Para Admin y User)
+   - Método: `PUT`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/repuestos/:id`
+   - Authorization: { "Bearer token" : "jwt_token"}
+   - Body (JSON):
+     ```json
+     {
+        "precio": 300
+     }
+     ```
+   - Response: 
+	{
+	    "_id": "66f774949bd2e5bf16a7e3c9",
+	    "nombre": "repuesto A",
+	    "marca": "AAA",
+	    "modelo": "PBC-111",
+	    "anio": 2023,
+	    "precio": 300,
+	    "foto": "https://tienda.com/REPUESTO-1.jpg",
+	    "__v": 0
+	}
+
+5. Eliminar repuesto por ID (Solo para Admin)
+   - Método: `DELETE`
+   - URL: `https://nestjs-desafio4-takt.onrender.com/repuestos/:id`
+   - Authorization: { "Bearer token" = "jwt_token"}
+   - Response: 
+           "This action removes a #id repuesto"
+
+
+
